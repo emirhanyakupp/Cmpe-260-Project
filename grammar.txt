@@ -1,0 +1,188 @@
+CmpE 260 - Project 1 - Grammar Document (BNF)
+==============================================
+Language: Mini Programming Language
+Default scoping: Static (Lexical)
+Optional scoping mode: Dynamic, selected with --scope dynamic
+Evaluation: Call-By-Value
+Implemented bonus features: B1 Strings, B2 While Loops, B3 Lists, B4 Static/Dynamic Scoping
+
+-----------------------------------------------
+1. PROGRAM STRUCTURE
+-----------------------------------------------
+
+<program>       ::= <block>
+
+<block>         ::= (<statement> ";")* <expr>
+                  | (<statement> ";")*
+
+<statement>     ::= <let-stmt>
+                  | <assign-stmt>
+                  | <print-stmt>
+                  | <while-stmt>
+                  | <expr>
+
+-----------------------------------------------
+2. STATEMENTS
+-----------------------------------------------
+
+<let-stmt>      ::= "let" <identifier> "=" <expr>
+
+<assign-stmt>   ::= <identifier> "=" <expr>
+
+<print-stmt>    ::= "print" "(" <expr> ")"
+
+<while-stmt>    ::= "while" <expr> "do" <block> "end"
+
+Note: while is a statement, not an expression. A while statement must be
+      terminated by a semicolon when it appears inside a block.
+
+-----------------------------------------------
+3. EXPRESSIONS (ordered lowest to highest precedence)
+-----------------------------------------------
+
+<expr>          ::= <or-expr>
+
+<or-expr>       ::= <and-expr>
+                  | <or-expr> "or" <and-expr>
+
+<and-expr>      ::= <comp-expr>
+                  | <and-expr> "and" <comp-expr>
+
+<comp-expr>     ::= <add-expr>
+                  | <add-expr> ("==" | "!=" | "<" | ">" | "<=" | ">=") <add-expr>
+
+<add-expr>      ::= <mul-expr>
+                  | <add-expr> "+" <mul-expr>
+                  | <add-expr> "-" <mul-expr>
+
+<mul-expr>      ::= <unary-expr>
+                  | <mul-expr> "*" <unary-expr>
+                  | <mul-expr> "/" <unary-expr>
+
+<unary-expr>    ::= "not" <unary-expr>
+                  | "-" <unary-expr>
+                  | <postfix-expr>
+
+<postfix-expr>  ::= <primary>
+                  | <postfix-expr> "(" <args> ")"
+                  | <postfix-expr> "(" ")"
+                  | <postfix-expr> "[" <expr> "]"
+
+<args>          ::= <expr>
+                  | <args> "," <expr>
+
+<primary>       ::= <literal>
+                  | <identifier>
+                  | <if-expr>
+                  | <fun-expr>
+                  | <list-lit>
+                  | "length" "(" <expr> ")"
+                  | "append" "(" <expr> "," <expr> ")"
+                  | "(" <expr> ")"
+
+-----------------------------------------------
+4. COMPOUND EXPRESSIONS
+-----------------------------------------------
+
+<if-expr>       ::= "if" <expr> "then" <block> "else" <block> "end"
+
+<fun-expr>      ::= "fun" "(" <params> ")" "->" <block> "end"
+                  | "fun" "(" ")" "->" <block> "end"
+
+<params>        ::= <identifier>
+                  | <params> "," <identifier>
+
+-----------------------------------------------
+5. LITERALS, STRINGS, LISTS, AND IDENTIFIERS
+-----------------------------------------------
+
+<literal>       ::= <int-lit>
+                  | <bool-lit>
+                  | <string-lit>
+                  | <list-lit>
+
+<int-lit>       ::= <digit>+
+
+<bool-lit>      ::= "true"
+                  | "false"
+
+<string-lit>    ::= "\"" <string-char>* "\""
+
+<string-char>   ::= any character except an unescaped double quote or backslash
+                  | <escape-seq>
+
+<escape-seq>    ::= "\\n" | "\\t" | "\\\\" | "\\\""
+
+<list-lit>      ::= "[" "]"
+                  | "[" <expr-list> "]"
+
+<expr-list>     ::= <expr>
+                  | <expr-list> "," <expr>
+
+<identifier>    ::= <alpha> (<alpha> | <digit> | "_")*
+
+<digit>         ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+
+<alpha>         ::= "a" | ... | "z" | "A" | ... | "Z"
+
+Note: Identifiers cannot start with underscore. Underscore is allowed only
+      after the first character.
+
+-----------------------------------------------
+6. COMMENTS
+-----------------------------------------------
+
+Block comments:  (* ... *)    (non-nested)
+
+-----------------------------------------------
+7. OPERATOR PRECEDENCE TABLE (lowest to highest)
+-----------------------------------------------
+
+Level   Operator(s)              Associativity
+------  -----------------------  -------------
+1       or                       left
+2       and                      left
+3       == != < > <= >=          non-associative
+4       + -                      left
+5       * /                      left
+6       not  (unary -)           right (prefix)
+7       function call f(...),    left
+        list indexing xs[i]
+
+Notes:
+- Non-associative means "a == b == c" is a syntax error.
+- Parentheses can always be used to override precedence.
+- Negative integer literals are parsed as unary minus applied to int-lit.
+- The + operator supports integer addition and string concatenation when both operands are strings.
+- length(expr) returns the number of characters in a string or the number of elements in a list.
+- append(list, value) mutates the list by adding value at the end and returns the same list.
+- Indexing requires a list and an integer index. Out-of-bounds indices are runtime errors.
+- The "end" keyword closes both if...end and fun...end blocks, eliminating dangling-else ambiguity.
+
+-----------------------------------------------
+8. RESERVED KEYWORDS
+-----------------------------------------------
+
+Core:  let  fun  if  then  else  end  and  or  not  true  false  print
+Bonus/reserved:  while  do  length  append
+
+None of these may be used as variable names or function parameter names.
+
+-----------------------------------------------
+9. SCOPING MODES
+-----------------------------------------------
+
+Default command:
+  python interpreter.py program.txt
+
+Equivalent static command:
+  python interpreter.py --scope static program.txt
+
+Dynamic command:
+  python interpreter.py --scope dynamic program.txt
+
+Static scoping:
+  A function call frame's parent is the closure's definition-time environment.
+
+Dynamic scoping:
+  A function call frame's parent is the call-site environment.

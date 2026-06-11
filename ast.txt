@@ -1,0 +1,46 @@
+CmpE 260 - Project 1 - AST Node Design
+======================================
+
+This document describes the abstract syntax tree nodes used by the interpreter.
+The interpreter uses call-by-value evaluation. It supports static lexical scoping by default and dynamic scoping with --scope dynamic.
+
+| Node Type | Fields | Description |
+|---|---|---|
+| NumberLit | value: int | Represents an integer literal. |
+| BoolLit | value: bool | Represents true or false. |
+| StringLit | value: string | Represents a string literal for B1. Escape sequences are decoded before storage. |
+| ListLit | elements: list[Node] | Represents a B3 list literal such as [] or [1, 2, 3]. |
+| Identifier | name: string | Represents a variable reference. |
+| BinOp | op: string, left: Node, right: Node | Represents binary operations such as +, -, *, /, ==, !=, <, >, <=, >=, and, or. |
+| UnaryOp | op: string, operand: Node | Represents unary - and not. |
+| IfExpr | cond: Node, then_branch: Block, else_branch: Block | Represents if-then-else-end expressions. |
+| FunExpr | params: list[str], body: Block | Represents anonymous function definitions. |
+| CallExpr | func: Node, args: list[Node] | Represents function calls and built-in calls such as length(x) and append(xs, x). |
+| IndexExpr | collection: Node, index: Node | Represents B3 list indexing such as xs[0]. |
+| LetStmt | name: string, value: Node | Introduces a new binding in the current environment. |
+| AssignStmt | name: string, value: Node | Updates an existing binding in the environment chain. |
+| PrintStmt | expr: Node | Evaluates and prints a value to standard output. |
+| WhileStmt | cond: Node, body: Block | Represents while-do-end loops for B2. |
+| Block | statements: list[Node], final_expr: Node or None | Represents a sequence of statements and an optional final expression. |
+
+Runtime support classes
+-----------------------
+
+| Class | Fields | Description |
+|---|---|---|
+| Environment | bindings: dict, parent: Environment or None | Represents one environment frame. |
+| Closure | params: list[str], body: Block, env: Environment | Represents a function value together with the environment captured at definition time. |
+
+Important design notes
+----------------------
+
+- Only function calls create new environment frames.
+- let adds a binding to the current frame.
+- assignment searches upward and updates the nearest existing binding.
+- FunExpr always evaluates to a Closure that stores its definition-time environment.
+- In static mode, CallExpr creates a fresh frame whose parent is the closure's captured environment.
+- In dynamic mode, CallExpr creates a fresh frame whose parent is the call-site environment.
+- B1 is represented by StringLit and length(string).
+- B2 is represented by WhileStmt.
+- B3 is represented by ListLit, IndexExpr, length(list), and append(list, value).
+- B4 is controlled by the command-line flag --scope static|dynamic.

@@ -1,0 +1,34 @@
+(* higher_order.txt - Higher-order functions: taking and returning functions *)
+
+(* apply_twice: takes a function f and a value, applies f two times *)
+let apply_twice = fun (f, val) ->
+    f(f(val))
+end;
+
+let add_five = fun (x) -> x + 5 end;
+print(apply_twice(add_five, 10));  (* Expected output: 20  -- add_five(add_five(10)) *)
+
+(* compose: returns a new function that applies g then f (f ∘ g) *)
+let compose = fun (f, g) ->
+    fun (x) -> f(g(x)) end
+end;
+
+let double  = fun (x) -> x * 2 end;
+let inc     = fun (x) -> x + 1 end;
+
+let double_then_inc = compose(inc, double);   (* inc(double(x)) *)
+let inc_then_double = compose(double, inc);   (* double(inc(x)) *)
+
+print(double_then_inc(4));  (* Expected output: 9   -- inc(double(4)) = inc(8) = 9  *)
+print(inc_then_double(4));  (* Expected output: 10  -- double(inc(4)) = double(5) = 10 *)
+
+(* flip: reverses the two arguments of a two-argument function *)
+let flip = fun (f) ->
+    fun (a, b) -> f(b, a) end
+end;
+
+let sub = fun (a, b) -> a - b end;
+let flipped_sub = flip(sub);
+
+print(sub(10, 3));          (* Expected output: 7   -- 10 - 3 *)
+print(flipped_sub(10, 3));  (* Expected output: -7  -- 3 - 10 *)

@@ -1,0 +1,28 @@
+(* recursion.txt - Recursive functions: factorial and fibonacci *)
+
+(* Factorial: base case n <= 1 returns 1, recursive case n * factorial(n-1) *)
+let factorial = fun (n) ->
+    if n <= 1 then
+        1
+    else
+        n * factorial(n - 1)
+    end
+end;
+
+(* Fibonacci: base cases 0 and 1, recursive case fib(n-1) + fib(n-2) *)
+let fib = fun (n) ->
+    if n <= 0 then
+        0
+    else
+        if n == 1 then
+            1
+        else
+            fib(n - 1) + fib(n - 2)
+        end
+    end
+end;
+
+print(factorial(5));  (* Expected output: 120 *)
+print(factorial(0));  (* Expected output: 1   -- base case *)
+print(fib(7));        (* Expected output: 13  *)
+print(fib(10));       (* Expected output: 55  *)

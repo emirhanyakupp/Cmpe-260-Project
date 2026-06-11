@@ -1,0 +1,15 @@
+(* lists.txt - B3 list literals, indexing, append, and length *)
+
+let xs = [1, 2, 3];
+print(xs);                 (* Expected output: [1, 2, 3] *)
+print(xs[0]);              (* Expected output: 1 *)
+print(xs[length(xs) - 1]); (* Expected output: 3 *)
+
+append(xs, 4);
+print(xs);                 (* Expected output: [1, 2, 3, 4] *)
+print(length(xs));         (* Expected output: 4 *)
+
+let nested = [xs, [10, 20], "hi"];
+print(nested[0][2]);       (* Expected output: 3 *)
+print(nested[1][1]);       (* Expected output: 20 *)
+print(nested[2]);          (* Expected output: hi *)

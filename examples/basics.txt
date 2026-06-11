@@ -1,0 +1,22 @@
+(* basics.txt - Variable declarations, arithmetic, comparisons, print *)
+
+(* Integer arithmetic and truncating division *)
+let a = 15;
+let b = 4;
+let c = a / b;
+
+(* Boolean expressions using and/or/not *)
+let isValid = (a > 10) and (c == 3);
+let isLarge = a >= 15;
+let notZero = not (b == 0);
+
+(* Arithmetic: subtraction, multiplication *)
+let product = a * b;
+let diff = a - b;
+
+print(c);         (* Expected output: 3  -- integer division truncated toward zero *)
+print(isValid);   (* Expected output: true *)
+print(isLarge);   (* Expected output: true *)
+print(notZero);   (* Expected output: true *)
+print(product);   (* Expected output: 60 *)
+print(diff);      (* Expected output: 11 *)

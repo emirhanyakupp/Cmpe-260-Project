@@ -1,0 +1,33 @@
+(* closures.txt - Closures: inner function captures outer variable *)
+
+(* make_multiplier returns a new function that closes over 'factor'.
+   Even after make_multiplier returns, the inner function still has
+   access to the 'factor' value from its defining environment. *)
+let make_multiplier = fun (factor) ->
+    fun (x) ->
+        x * factor
+    end
+end;
+
+let times_three = make_multiplier(3);
+let times_ten   = make_multiplier(10);
+
+print(times_three(10));  (* Expected output: 30  -- factor=3, x=10 *)
+print(times_ten(7));     (* Expected output: 70  -- factor=10, x=7 *)
+print(times_three(times_ten(2)));  (* Expected output: 60  -- 3*(10*2) *)
+
+(* Counter: closure over a mutable captured variable.
+   Each call to the returned function increments 'count' in the
+   enclosing frame (assignment walks up the environment chain). *)
+let make_counter = fun (start) ->
+    let count = start;
+    fun () ->
+        count = count + 1;
+        count
+    end
+end;
+
+let c = make_counter(0);
+print(c());  (* Expected output: 1 *)
+print(c());  (* Expected output: 2 *)
+print(c());  (* Expected output: 3 *)

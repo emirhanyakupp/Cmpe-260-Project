@@ -1,0 +1,30 @@
+(* scope.txt - Static (lexical) scoping: closure preserves defining environment *)
+
+(* Under static scoping, a function looks up free variables in the
+   environment where it was DEFINED, not where it is called.
+
+   Here, get_x is defined when x=100 is in scope.
+   Even when called from inside test_scope (where x=200 is bound),
+   get_x still sees x=100 from its defining environment. *)
+
+let x = 100;
+
+let get_x = fun () -> x end;
+
+let test_scope = fun () ->
+    let x = 200;       (* This x shadows the outer x ONLY inside test_scope *)
+    get_x()            (* get_x was defined outside, so it resolves x=100 *)
+end;
+
+print(get_x());       (* Expected output: 100  -- directly calls get_x *)
+print(test_scope());  (* Expected output: 100  -- NOT 200; static scoping applies *)
+
+(* Another example: make_adder captures 'base' at definition time *)
+let make_adder = fun (base) ->
+    fun (n) -> base + n end
+end;
+
+let add10 = make_adder(10);
+
+let base = 999;   (* Rebinding 'base' at top level has no effect on add10 *)
+print(add10(5));  (* Expected output: 15  -- captured base=10, not 999 *)
