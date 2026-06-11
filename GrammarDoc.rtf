@@ -1,0 +1,33 @@
+{\rtf1\ansi\ansicpg1254\cocoartf2870
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <program>       ::= <block>\
+<block>         ::= (<statement> ";")* <expr>?\
+<statement>     ::= <let-stmt> | <assign-stmt> | <print-stmt> | <expr>\
+<let-stmt>      ::= "let" <identifier> "=" <expr>\
+<assign-stmt>   ::= <identifier> "=" <expr>\
+<print-stmt>    ::= "print" "(" <expr> ")"\
+\
+<expr>          ::= <or-expr>\
+<or-expr>       ::= <and-expr> ("or" <and-expr>)*\
+<and-expr>      ::= <comp-expr> ("and" <comp-expr>)*\
+<comp-expr>     ::= <add-expr> (("==" | "!=" | "<" | ">" | "<=" | ">=") <add-expr>)?\
+<add-expr>      ::= <mul-expr> (("+" | "-") <mul-expr>)*\
+<mul-expr>      ::= <unary-expr> (("*" | "/") <unary-expr>)*\
+<unary-expr>    ::= ("not" | "-") <unary-expr> | <call-expr>\
+<call-expr>     ::= <primary> ("(" <args>? ")")*\
+<args>          ::= <expr> ("," <expr>)*\
+\
+<primary>       ::= <literal> | <identifier> | <if-expr> | <fun-expr> | "(" <expr> ")"\
+<if-expr>       ::= "if" <expr> "then" <block> "else" <block> "end"\
+<fun-expr>      ::= "fun" "(" <params>? ")" "->" <block> "end"\
+<params>        ::= <identifier> ("," <identifier>)*\
+\
+<literal>       ::= <int-lit> | <bool-lit>\
+<int-lit>       ::= [0-9]+\
+<bool-lit>      ::= "true" | "false"\
+<identifier>    ::= [a-zA-Z] [a-zA-Z0-9_]*}
