@@ -3,7 +3,8 @@ Mini Programming Language Interpreter
 ======================================
 
 Author(s):
-  Emirhan Yakup Altuntaş, STUDENT_ID_HERE
+  Emirhan Yakup Altuntaş, 2023400084
+  Efe Dikilitaş, 2023400045
 
 --------------------------------------
 HOW TO RUN
